@@ -18,4 +18,6 @@ after a wait period, it allows a few trial requests to check if the Payment Serv
 •	We can also provide a fallback method
 — for example, returning a message like ‘Payment is currently unavailable’ or queueing the order for later processing.
 
-This improves resilience and prevents cascading failures in microservices."
+This improves resilience and prevents cascading failures in microservices.
+
+"We can also use Kafka for asynchronous communication in non-critical flows, so services don’t block each other if one is temporarily unavailable"
