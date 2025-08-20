@@ -1,0 +1,23 @@
+👉 Can you explain the difference between == operator and .equals() method in Java, and give me a situation where using one over the other matters?
+
+== checks whether two references point to the same object in memory
+
+while .equals() is meant to compare the actual content of objects
+
+For example, 
+
+String s1 = "Java"; 
+
+String s2 = "Java";
+
+s1 == s2 is true 
+
+because they point to the same object in the string pool
+
+String s2 = new String("Java");
+
+then s1 == s2 would be false, 
+
+but s1.equals(s2) would be true since String overrides .equals() to compare values. 
+
+By default, .equals() in Object class also behaves like ==, but many classes override it to provide value-based comparison
