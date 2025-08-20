@@ -4,6 +4,7 @@ If the Payment Service is down or very slow, how would you prevent your Order Se
 If the Payment Service is down or slow, we can apply the Circuit Breaker pattern using a library like Resilience4j.
 
 •	The Circuit Breaker has three states:
+
 Closed: 
 calls flow as normal.
 
