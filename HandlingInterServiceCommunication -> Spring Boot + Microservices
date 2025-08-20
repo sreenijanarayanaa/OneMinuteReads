@@ -1,0 +1,18 @@
+👉 In your current claims processing project, 
+how do you handle inter-service communication between microservices? 
+Do you use REST, messaging (Kafka), or both? Can you explain why?
+
+In our claims processing system, we use both synchronous and asynchronous inter-service communication depending on the use case.
+
+For synchronous communication, where we need an immediate response 
+— for example, when our Claim Service calls the Policy Service to validate policy details
+— we use REST APIs over HTTP. This ensures the calling service gets the required response before proceeding.
+
+For asynchronous communication, where the caller shouldn’t wait 
+— for example, sending notification emails or updating audit logs
+— we use Kafka as a message broker. This allows us to decouple services, improve scalability, and handle spikes in traffic through message queues and retries.
+
+In short, REST for real-time request-response and Kafka for event-driven communication.
+
+"We use REST for synchronous communication when one service depends on an immediate response, like claim validation. 
+For asynchronous use cases, such as sending emails or publishing events, we use Kafka, which decouples services and improves scalability."
