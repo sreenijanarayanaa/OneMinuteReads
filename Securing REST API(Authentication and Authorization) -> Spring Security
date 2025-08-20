@@ -1,0 +1,31 @@
+👉 Suppose you are securing a REST API in Spring Boot. How would you implement authentication & authorization so that:
+•	Only authenticated users can access APIs, and
+•	Some endpoints are restricted to ADMIN role only?
+
+To secure a REST API in Spring Boot:
+
+Authentication:
+•	I’d use Spring Security with JWT. 
+When a user logs in (e.g., /login endpoint), we validate their username/password against the database (using a UserDetailsService).
+•	On success, we generate a JWT token and return it. The client includes this token in the Authorization: Bearer <token> header for subsequent requests.
+
+Authorization:
+•	In the SecurityFilterChain, we configure which endpoints require which roles. For example:
+@Bean
+SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    return http
+        .csrf().disable()
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+            .anyRequest().authenticated()
+        )
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt()) // if using OAuth2/JWT
+        .build();
+}
+•	This ensures only authenticated users can access APIs, 
+and only users with the ADMIN role can access /admin endpoints.
+
+Why JWT? 
+JWT makes the API stateless — no session storage needed on the server. 
+Also, it scales better for microservices since tokens can be validated without hitting the DB each time.
