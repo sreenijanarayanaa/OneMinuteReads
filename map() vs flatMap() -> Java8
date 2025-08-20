@@ -1,0 +1,32 @@
+👉 Can you explain the difference between map() and flatMap() in Java Streams? Can you also give a practical example where flatMap() is more useful than map()?
+
+o	map() → transforms the data
+o	flatMap() → transforms + flattens the data
+
+Examples: 
+	For map(): transform names to uppercase.
+	For flatMap(): flatten a list of lists of integers.
+
+map() is used to apply a transformation function to each element of the stream, and it returns a new Stream of the transformed elements.
+
+For example:
+
+List<String> names = Arrays.asList("sree", "java");
+names.stream().map(String::toUpperCase).forEach(System.out::println);
+// Output: SREE, JAVA
+
+flatMap() is used when each element itself contains a collection (or another stream).
+It not only applies the transformation but also flattens the nested structure into a single stream.
+
+List<List<Integer>> listOfLists = Arrays.asList(
+    Arrays.asList(1, 2),
+    Arrays.asList(3, 4)
+);
+listOfLists.stream()
+           .flatMap(List::stream)
+           .forEach(System.out::println);
+// Output: 1, 2, 3, 4
+
+A real-world example: 
+if you’re reading a list of sentences and want a stream of words, 
+you’d use flatMap to split each sentence and flatten them into a single word stream.
