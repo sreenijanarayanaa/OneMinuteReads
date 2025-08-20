@@ -1,0 +1,16 @@
+👉 Suppose two users try to update the same order record in MySQL at the same time. How would you handle this concurrency problem to ensure data consistency?
+
+When two users try to update the same order record concurrently, 
+we need to ensure consistency using transaction isolation and locking mechanisms:
+
+•	Optimistic Locking: We add a version field to the Order entity (using @Version in JPA). 
+ Each update checks the version — if another user has updated the row, it will throw an OptimisticLockException. 
+ The application can then retry or inform the user. This is efficient when conflicts are rare.
+
+•	Pessimistic Locking: We explicitly lock the record during a transaction using @Lock(LockModeType.PESSIMISTIC_WRITE) in JPA.
+ This prevents other transactions from updating it until the current one finishes. Useful when conflicts are frequent.
+
+•	Isolation Levels: MySQL also allows adjusting transaction isolation (READ COMMITTED, REPEATABLE READ, SERIALIZABLE) 
+ depending on the level of consistency required versus performance.
+
+In real-world Spring Boot applications, I’d typically start with optimistic locking (lighter, scalable), and switch to pessimistic locking only if conflicts are high
