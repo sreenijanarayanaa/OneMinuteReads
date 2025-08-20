@@ -1,0 +1,21 @@
+👉 In microservices, suppose your Order Service calls the Payment Service synchronously. 
+If the Payment Service is down or very slow, how would you prevent your Order Service from hanging indefinitely?
+
+If the Payment Service is down or slow, we can apply the Circuit Breaker pattern using a library like Resilience4j.
+
+•	The Circuit Breaker has three states:
+Closed: 
+calls flow as normal.
+
+Open:
+after a threshold of failures, it stops making calls to the Payment Service and fails fast.
+
+Half-Open:
+after a wait period, it allows a few trial requests to check if the Payment Service has recovered.
+
+•	Along with the circuit breaker, we also configure timeouts so the Order Service doesn’t hang indefinitely waiting for a response.
+
+•	We can also provide a fallback method
+— for example, returning a message like ‘Payment is currently unavailable’ or queueing the order for later processing.
+
+This improves resilience and prevents cascading failures in microservices."
