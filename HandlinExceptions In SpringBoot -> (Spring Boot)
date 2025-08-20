@@ -1,0 +1,14 @@
+👉How do you handle exceptions in your Spring Boot microservices? Do you use @ControllerAdvice, custom exceptions, or something else?
+
+In our Spring Boot microservices, we use a centralized exception handling mechanism through spring boot's @ControllerAdvice and @ExceptionHandler. 
+
+This allows us to catch and handle exceptions globally across all controllers uniformly (instead of duplicating try-catch blocks)
+
+We also define custom exception classes for specific errors (e.g., UserNotFoundException, ClaimsIdIsInvalid, NotificationSendFailedException) to handle domain-specific errors. 
+
+In our handler methods return appropriate HTTP status codes like 400 Bad Request, 404 Not Found, or 500 Internal Server Error,
+and return a structured error response with a clear message and timestamp.
+
+Additionally, we log the exceptions and push them to our centralized monitoring system (ELK stack) so that failures can be tracked and alerted.
+
+This ensures that the API consumer receives a consistent and user-friendly error response and we maintain better observability in production.
