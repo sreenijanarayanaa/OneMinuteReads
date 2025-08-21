@@ -1,1 +1,23 @@
+👉 Imagine you are designing an E-commerce Order Service in a microservices architecture. When a user places an order, you need to:
+1.	Save the order in MySQL.
+2.	Notify the Payment Service.
+3.	Notify the Notification Service (to send an email/SMS).
+How would you design this flow using Spring Boot & microservices best practices?
+
+
+When a user places an order, the Order Service first persists the order in MySQL using Spring Data JPA.
+Next:
+1.	Payment Service →
+I’d call synchronously via REST (e.g., RestTemplate or WebClient) 
+because the user needs an immediate response on payment success/failure. 
+If the payment fails, I’d update the order status to FAILED.
+
+2.	Notification Service → 
+I’d decouple this using Kafka. After saving the order, Order Service publishes an OrderCreated event to a Kafka topic. 
+The Notification Service consumes this event and uses JavaMailSender to send emails. 
+This way, if the Notification Service is down, order placement isn’t blocked.
+
+
+This design combines synchronous calls where necessary (Payment), and asynchronous, event-driven communication 
+where decoupling improves scalability and resilience (Notification).
 
