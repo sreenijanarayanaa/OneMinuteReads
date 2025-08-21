@@ -1,3 +1,9 @@
+•	Circuit Breaker pattern is like a safety switch for microservices.
+•	If a service starts to fail often, this pattern stops more requests from going to that failing service. 
+•	This prevents further problems and gives the service time to fix itself. 
+•	After a set time, it checks if the service is working well again before allowing requests to go through, helping to keep the system stable.
+
+
 👉 In microservices, suppose your Order Service calls the Payment Service synchronously. 
 If the Payment Service is down or very slow, how would you prevent your Order Service from hanging indefinitely?
 
