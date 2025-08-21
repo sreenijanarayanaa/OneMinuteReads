@@ -1,0 +1,10 @@
+👉 Suppose in the same e-commerce flow, the order is saved in MySQL but the payment fails. How would you ensure data consistency across services in this case?
+In our e-commerce example:
+•	The Order Service saves the order in PENDING state and publishes an OrderCreated event.
+•	The Payment Service consumes it, processes the payment, and publishes either PaymentSuccess or PaymentFailed.
+•	If successful, the Order Service updates the status to CONFIRMED.
+•	If failed, instead of rolling back the DB insert, the Order Service triggers a compensating transaction — updating the order to CANCELLED.
+There are two Saga implementation styles:
+•	Choreography: Services communicate via events (Kafka, RabbitMQ). Decentralized, simpler, but can get complex with many services.
+•	Orchestration: A central Saga orchestrator controls the flow. More control, but single point of dependency.
+This way, we achieve eventual consistency across services without relying on distributed 2-phase commits.
