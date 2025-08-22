@@ -1,4 +1,4 @@
-Both HashMap and ConcurrentHashMap store data as key-value pairs, but the difference lies in concurrency.
+=> Both HashMap and ConcurrentHashMap store data as key-value pairs, but the difference lies in concurrency.
 •	HashMap: 
    Not thread-safe. 
    If multiple threads modify it concurrently, it may lead to data inconsistency or even infinite loops during resizing. 
