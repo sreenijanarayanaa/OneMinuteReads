@@ -26,6 +26,32 @@ SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 •	This ensures only authenticated users can access APIs, 
 and only users with the ADMIN role can access /admin endpoints.
 
-Why JWT? 
+👉 Why JWT? 
 JWT makes the API stateless — no session storage needed on the server. 
 Also, it scales better for microservices since tokens can be validated without hitting the DB each time.
+
+
+👉In your microservices, how do you secure APIs so only authorized clients can access them? Have you used JWT, OAuth2, or any other approach?
+
+In our microservices, we secure APIs using Spring Security with JWT-based authentication and role-based authorization.
+
+Authentication:
+When a user tries tp logs in, their credentials are validated via a custom UserDetailsService(I) that loads user info from the database.
+If valid, we generate a JWT token that contains user details and roles. 
+This token is then included in the Authorization header (Bearer token) for every request.
+
+Authorization: 
+We use role-based access control. 
+In the security config, we use methods like .hasRole("ADMIN") or annotations like @PreAuthorize("hasRole('USER')") to restrict access.
+
+Validation: 
+A JWT filter in the Spring Security filter chain validates the token for every incoming request before passing it to the controller. 
+If invalid or expired, we return 401 Unauthorized.
+
+Service-to-service security:
+For inter-service calls, the services also pass a JWT, ensuring only authorized services can talk to each other.
+
+This way, our APIs are stateless, secure, and scalable, without relying on server-side sessions.
+
+"We secure APIs using JWT with Spring Security. On login, a JWT is generated and passed in the Authorization header"
+"A custom filter validates the token on each request, and role-based access is enforced using hasRole and @PreAuthorize. This keeps the system stateless and scalable."
