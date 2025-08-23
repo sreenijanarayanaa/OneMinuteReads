@@ -31,6 +31,28 @@
 	  Fine-grained locking only when absolutely necessary (like resizing buckets).
     This means reads are non-blocking and most writes can happen in parallel.
 
+🔹 In Java 8’s ConcurrentHashMap, CAS (Compare-And-Swap) is mainly used during insertions to avoid locking when possible.
+
+If that bucket is empty (null), it tries to insert the new node using CAS.
+
+If CAS succeeds → no locking needed.
+
+If CAS fails (because another thread inserted at the same time), it falls back to synchronized block on that bucket.
+
+Resizing
+
+During table resizing, CAS is used to ensure safe transfer of buckets from old to new table by multiple threads working together.
+
+Updates (compute, putIfAbsent, etc.)
+
+In some operations, CAS is used to atomically update values without locking the entire bucket when contention is low.
+
+✅ Summary
+In ConcurrentHashMap, CAS is mainly used when inserting into an empty bucket —
+it allows a thread to place the first node lock-free. 
+If CAS fails due to contention, it falls back to a synchronized block at the bucket level. 
+This combination of CAS and minimal locking makes ConcurrentHashMap much more scalable than a fully synchronized map.
+
 🔹Think of a library:
     •	synchronizedMap = locking the whole library door whenever one person wants to borrow a book → only one person at a time.
     •	ConcurrentHashMap = locking only the specific bookshelf you’re using, so many people can borrow books from different shelves at the same time.
