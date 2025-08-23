@@ -55,3 +55,17 @@ This way, our APIs are stateless, secure, and scalable, without relying on serve
 
 "We secure APIs using JWT with Spring Security. On login, a JWT is generated and passed in the Authorization header"
 "A custom filter validates the token on each request, and role-based access is enforced using hasRole and @PreAuthorize. This keeps the system stateless and scalable."
+
+👉To secure REST APIs between microservices, I would use a combination of authentication, authorization, and transport security:
+
+At the API Gateway level, I’d enforce authentication, usually with OAuth2 or JWT tokens.
+The client first authenticates (e.g., via Keycloak or Spring Security OAuth2), gets a token, and then every request passes through the gateway with this token.
+
+Each downstream microservice validates the token independently to ensure it hasn’t been tampered with and to check user roles/permissions for authorization.  
+This makes each service secure, even if someone bypasses the gateway.
+
+All inter-service communication happens over HTTPS to protect data in transit.
+
+Optionally, for sensitive services, we can use mutual TLS (mTLS) so that services authenticate each other, not just the client.
+
+This layered approach ensures that microservices remain secure, scalable, and independent.
