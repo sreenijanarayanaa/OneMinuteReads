@@ -1,4 +1,5 @@
 => Both HashMap and ConcurrentHashMap store data as key-value pairs, but the difference lies in concurrency.
+
 •	HashMap: 
    Not thread-safe. 
    If multiple threads modify it concurrently, it may lead to data inconsistency or even infinite loops during resizing. 
@@ -22,7 +23,7 @@
 
 🔹 Why ConcurrentHashMap is different from Collections.synchronizedMap(new HashMap())
 
-    o	When you wrap a HashMap with Collections.synchronizedMap(), every method call is synchronized on a single lock (the entire map object).
+    o	In Collections.synchronizedMap(new HashMap()) every method call is synchronized on a single lock (the entire map object).
     o	This means only one thread can read or write at a time, making it thread-safe but very slow under high concurrency.
     o	ConcurrentHashMap, on the other hand, does not lock the entire map for every operation.
     o	Java 7: It divided the map into segments (buckets). Each segment had its own lock. So, multiple threads could safely update different buckets at the same time.
