@@ -17,44 +17,25 @@
    In single-threaded contexts, HashMap is faster. 
    In multi-threaded contexts, ConcurrentHashMap is much safer and more efficient compared to synchronizing a HashMap.
 
+🔹Think of a library:
+    •	synchronizedMap = locking the whole library door whenever one person wants to borrow a book → only one person at a time.
+    •	ConcurrentHashMap = locking only the specific bookshelf you’re using, so many people can borrow books from different shelves at the same time.
+
 🔹When to use what:
     I’d use HashMap in simple, single-threaded scenarios (like caching inside one request),
     and ConcurrentHashMap when multiple threads need concurrent reads/writes — e.g., maintaining a shared in-memory cache in a microservices app
 
 🔹 Why ConcurrentHashMap is different from Collections.synchronizedMap(new HashMap())
 
-    o	In Collections.synchronizedMap(new HashMap()) every method call is synchronized on a single lock (the entire map object).
-    o	This means only one thread can read or write at a time, making it thread-safe but very slow under high concurrency.
-    o	ConcurrentHashMap, on the other hand, does not lock the entire map for every operation.
-    o	Java 7: It divided the map into segments (buckets). Each segment had its own lock. So, multiple threads could safely update different buckets at the same time.
-    o	Java 8+: It replaced segmentation with a more efficient scheme:
-   	CAS (Compare-And-Swap) for updates (non-blocking).
-	  Fine-grained locking only when absolutely necessary (like resizing buckets).
-    This means reads are non-blocking and most writes can happen in parallel.
+    - In Collections.synchronizedMap(new HashMap()) every method call is synchronized on a single lock (the entire map object).
+    - This means only one thread can read or write at a time, making it thread-safe but very slow under high concurrency.
+    - In ConcurrentHashMap, when we call put(), it first computes the bucket index.
+   		• If the bucket is empty, it uses CAS(compare and swap) to insert the node lock-free.
+		• If CAS fails, or the bucket is already occupied, it synchronizes only on that bucket and either inserts into the linked list or red-black tree.
+		• If needed, resizing is triggered, where multiple threads can cooperate to transfer entries.
 
-🔹 In Java 8’s ConcurrentHashMap, CAS (Compare-And-Swap) is mainly used during insertions to avoid locking when possible.
+This combination of CAS for empty buckets, bucket-level locking for collisions, and parallel resizing gives ConcurrentHashMap its high scalability in multi-threaded environments.
 
-If that bucket is empty (null), it tries to insert the new node using CAS.
 
-If CAS succeeds → no locking needed.
 
-If CAS fails (because another thread inserted at the same time), it falls back to synchronized block on that bucket.
-
-Resizing
-
-During table resizing, CAS is used to ensure safe transfer of buckets from old to new table by multiple threads working together.
-
-Updates (compute, putIfAbsent, etc.)
-
-In some operations, CAS is used to atomically update values without locking the entire bucket when contention is low.
-
-✅ Summary
-In ConcurrentHashMap, CAS is mainly used when inserting into an empty bucket —
-it allows a thread to place the first node lock-free. 
-If CAS fails due to contention, it falls back to a synchronized block at the bucket level. 
-This combination of CAS and minimal locking makes ConcurrentHashMap much more scalable than a fully synchronized map.
-
-🔹Think of a library:
-    •	synchronizedMap = locking the whole library door whenever one person wants to borrow a book → only one person at a time.
-    •	ConcurrentHashMap = locking only the specific bookshelf you’re using, so many people can borrow books from different shelves at the same time.
 
