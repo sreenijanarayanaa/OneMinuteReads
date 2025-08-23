@@ -1,0 +1,25 @@
+👉 How does HashMap work internally in Java 8, and what improvements were introduced compared to earlier versions?
+
+A HashMap in Java stores key–value pairs in an array of buckets. 
+Each bucket holds nodes, and each node stores the key, value, hash, and a reference to the next node.
+
+When we call put(key, value), the key’s hashCode() is processed and then used with (n-1) & hash to find the bucket index. 
+If the bucket is empty, the entry is added. 
+If not, collisions are handled:
+  If the key already exists, the value is updated.
+  Otherwise, a new node is appended to that bucket.
+
+When the size of the map exceeds capacity × load factor (default 0.75), the HashMap resizes by doubling its capacity and rehashing entries.
+
+The big change in Java 8 is how collisions are handled:
+
+  Before Java 8, 
+      buckets were always a linked list, so worst-case lookup was O(n).
+
+   From Java 8, 
+      if a bucket’s linked list grows beyond 8 nodes and the table size is at least 64, the list is converted into a red-black tree. 
+      This reduces lookup time from O(n) to O(log n) in high-collision scenarios.
+
+If the table size is less than 64, instead of treeifying, the map resizes first, since resizing often reduces collisions.
+
+So overall, HashMap in Java 8 significantly improved worst-case performance by introducing tree bins while still balancing memory and efficiency.
