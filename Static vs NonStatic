@@ -1,0 +1,17 @@
+🔹 Static vs Non-Static in Java
+Aspect	                 Static	                                                                Non-Static
+Belongs to	             Class	                                                               Object (instance)
+Memory                   Allocation	Only once, in method area	For each object,                 in heap Access	Can be accessed without object (via ClassName.member)	Needs object to access
+Variables	               Shared across all objects	                                           Each object has its own copy
+Methods	                 Belong to class, cannot use this or super	                           Belong to objects, can use this and super
+When to Use            	 For constants, utility methods, counters, caches	When behavior/data   Can be overridden in subclass 
+                         depends on object state Overriding	Cannot be overridden 
+                         (only hidden if subclass declares same static method)	
+
+
+🔹 Static Members 
+Static methods cannot be overridden (only hidden).
+Constructors cannot be static.
+this and super cannot be used in static context.
+Static class = only allowed as nested.
+Static variables are shared, but not thread-safe by default.
