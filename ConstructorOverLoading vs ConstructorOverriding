@@ -1,0 +1,66 @@
+🔹 Constructor Overloading
+
+Definition → Having multiple constructors in the same class with different parameter lists (different number or types of arguments).
+
+Purpose → To create objects in different ways.
+
+Rules:
+
+Name must be same as the class.
+
+Different signatures (argument types/number).
+
+Happens within the same class.
+
+Example:
+
+class Employee {
+    int id;
+    String name;
+
+    // Constructor 1
+    Employee(int id) {
+        this.id = id;
+    }
+
+    // Constructor 2 (Overloaded)
+    Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+🔹 Constructor Overriding
+
+👉 NOT possible in Java.
+
+Why? Because constructors are not inherited by subclasses.
+
+Only methods can be overridden.
+
+A subclass can define its own constructor, but it’s not overriding the parent constructor, it’s just defining a new one.
+
+Example:
+
+class Parent {
+    Parent() {
+        System.out.println("Parent constructor");
+    }
+}
+
+class Child extends Parent {
+    Child() {
+        // Calls Parent() using super()
+        super();
+        System.out.println("Child constructor");
+    }
+}
+
+
+Here Child() is not overriding Parent(), it’s just chaining it using super().
+
+✅ (Short & Crisp)
+
+Constructor Overloading: Defining multiple constructors with different parameter lists in the same class.
+
+Constructor Overriding: Not possible in Java, because constructors are not inherited. Subclasses can only call parent constructors using super().
