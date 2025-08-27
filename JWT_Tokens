@@ -1,0 +1,80 @@
+What is a JWT Token?
+
+JWT stands for JSON Web Token. 
+It’s an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.
+JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.
+
+Structure of a JWT Token:
+
+Header
+Payload
+Signature
+
+
+Let’s break these down:
+
+Header: The header typically consists of two parts: 
+the type of token (JWT) and the signing algorithm being used (e.g., HMAC SHA256 or RSA).
+Example:
+
+{
+“alg”: “HS256”,
+“typ”: “JWT”
+}
+
+2. Payload: The payload contains claims. 
+Claims are statements about the user and additional data. There are three types of claims: registered, public, and private claims.
+
+Example:
+
+{
+“sub”: “1234567890”,
+“name”: “John Doe”,
+“admin”: true
+}
+
+3.Signature: To create the signature part, you have to take the encoded header, the encoded payload, a secret, and the algorithm specified in the header, and sign that.
+
+Example:
+
+HMACSHA256(
+base64UrlEncode(header) + “.” +
+base64UrlEncode(payload),
+secret)
+
+The three parts are then Base64Url encoded and concatenated with dots to form the final JWT token.
+
+Benefits of Using JWT Tokens:
+
+Stateless and Scalable: Servers don’t need to store session information, making them more scalable.
+Cross-domain / CORS: Easy to use across different domains.
+Mobile Friendly: Works well with native mobile apps.
+Decentralized: Tokens can be generated and verified by different services.
+Performance: Reduces database lookups for authentication.
+Use Cases for JWT Tokens:
+
+Authentication: The most common scenario for using JWT.
+Information Exchange: JWTs are a good way of securely transmitting information between parties.
+Authorization: Once a user is logged in, each subsequent request will include the JWT, allowing the user to access routes, services, and resources that are permitted with that token.
+Implementing JWT Authentication:
+
+User logs in with credentials (username and password).
+Server verifies credentials and generates a JWT token.
+Server sends the JWT token back to the client.
+Client stores the token (usually in local storage or a cookie).
+For subsequent requests, the client includes the JWT in the Authorization header.
+Server validates the JWT and grants access to protected resources if valid.
+Security Considerations:
+
+While JWTs offer many benefits, it’s crucial to implement them securely:
+
+Use HTTPS to prevent token interception.
+Set appropriate expiration times for tokens.
+Don’t store sensitive information in the payload.
+Use strong secrets for signing tokens.
+Implement token revocation mechanisms for added security.
+Conclusion:
+
+JWT tokens provide a robust, stateless authentication mechanism suitable for modern web applications. 
+By understanding their structure, benefits, and implementation details, developers can leverage JWTs to build more secure and scalable systems.
+
