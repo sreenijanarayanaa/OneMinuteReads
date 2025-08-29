@@ -14,3 +14,44 @@ we need to ensure consistency using transaction isolation and locking mechanisms
  depending on the level of consistency required versus performance.
 
 In real-world Spring Boot applications, I’d typically start with optimistic locking (lighter, scalable), and switch to pessimistic locking only if conflicts are high
+
+🔹 Transaction Isolation Levels in MySQL
+1. READ UNCOMMITTED
+
+Lowest isolation.
+
+Transactions can see uncommitted changes from other transactions.
+
+✅ Allows dirty reads.
+
+❌ Not commonly used because data can be inconsistent.
+
+2. READ COMMITTED
+
+Each SELECT sees only data committed at the moment the query runs.
+
+✅ Prevents dirty reads.
+
+❌ Still allows:
+
+Non-repeatable reads → same row read twice in the same transaction may show different values.
+
+Phantom reads → new rows may appear if another transaction inserts matching rows.
+
+3. REPEATABLE READ (⚡ Default in MySQL/InnoDB)
+
+Ensures that all reads within a transaction are consistent (even if another transaction modifies the data later).
+
+✅ Prevents dirty reads and non-repeatable reads.
+
+❌ Still allows phantom reads (but MySQL’s Next-Key Locking often prevents them in practice).
+
+4. SERIALIZABLE
+
+Highest isolation level.
+
+Transactions are executed as if sequentially (one after another).
+
+✅ Prevents dirty reads, non-repeatable reads, phantom reads.
+
+❌ Very costly (locks more rows, reduces concurrency).
